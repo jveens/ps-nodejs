@@ -9,6 +9,23 @@ var port = process.env.PORT || 5000;
 app.use(express.static('public'));
 app.set('views', './src/views');
 
+var nav = [
+    {
+        link: '/books',
+        text: 'All Books'
+    },
+    {
+        link: '/authors',
+        text: 'Authors'
+    }
+];
+
+
+//Express Router code moved to bookRoutes.js
+var bookRouter = require('./src/routes/bookRoutes')(nav);
+// tell the app we are using the book router for anything at '/books'
+app.use('/books', bookRouter);
+
 
 //// use jade
 // app.set('view engine', 'jade');
@@ -21,22 +38,30 @@ app.set('views', './src/views');
 app.set('view engine', '.ejs');
 
 
-// set up routes
+// set up routes (Manual)
 app.get('/', function (req, res) {
-	
-	res.render('index', {title: 'Hello from render', list: ['a', 'b'] });
-	
+    res.render('index', {
+        title: 'Hello from render',
+        nav: [{
+                link: '/books',
+                text: 'Books'
+            },
+            {
+                link: '/authors',
+                text: 'Authors'
+            }]
+    });
 });
-app.get('/books', function (req, res) {
-	
-	res.send('Hello Books');
-	
-});
+//app.get('/books', function (req, res) {
+//
+//    res.send('Hello Books');
+//
+//});
 
 app.listen(port, function (err) {
-	
-	'use strict';
-	
-	console.log('Running server on ' + port);
-	
+
+    'use strict';
+
+    console.log('Running server on ' + port);
+
 });
